@@ -11,5 +11,5 @@ terraform {
 
 provider "aws" {
   region  = var.vpc_region_aws
-  profile = "dev"
+  profile = var.vpc_profile_aws
 }
