@@ -30,4 +30,20 @@ variable "vpc_subnet_count_aws" {
   default     = 3
 }
 
+# configure aws profile
+
+variable "vpc_profile_aws" {
+  description = "Enter aws profile"
+  type        = string
+  default     = "dev"
+}
+
+#  configure subnet mask
+
+variable "vpc_subnet_mask_aws" {
+  description = "please enter a value, mask sum of this value and cidr mask should not exceed 28 and accomadate all subnets"
+  type        = number
+  default     = 4
+}
+
 

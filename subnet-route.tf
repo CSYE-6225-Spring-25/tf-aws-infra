@@ -1,8 +1,8 @@
 # configure cidr range for each subnets
 
 locals {
-  public_cidr_subnets  = [for i in range(var.vpc_subnet_count_aws) : cidrsubnet(var.vpc_cidr_aws, 4, i)]
-  private_cidr_subnets = [for i in range(var.vpc_subnet_count_aws) : cidrsubnet(var.vpc_cidr_aws, 4, i + var.vpc_subnet_count_aws)]
+  public_cidr_subnets  = [for i in range(var.vpc_subnet_count_aws) : cidrsubnet(var.vpc_cidr_aws, var.vpc_subnet_mask_aws, i)]
+  private_cidr_subnets = [for i in range(var.vpc_subnet_count_aws) : cidrsubnet(var.vpc_cidr_aws, var.vpc_subnet_mask_aws, i + var.vpc_subnet_count_aws)]
 }
 
 # public subnets
