@@ -1,4 +1,4 @@
-# tf-aws-infra
+# tf-aws-infra   
 
 ## Overview
 This project automates the creation of AWS networking infrastructure using Terraform. It sets up a Virtual Private Cloud (VPC) with public and private subnets across multiple availability zones, along with essential networking resources such as route tables and an Internet Gateway.
