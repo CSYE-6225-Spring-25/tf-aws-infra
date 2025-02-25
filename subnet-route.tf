@@ -8,7 +8,7 @@ locals {
 # public subnets
 
 resource "aws_subnet" "public" {
-  count                   = length(local.public_cidr_subnets)
+  count                   =     length(local.public_cidr_subnets)
   vpc_id                  = aws_vpc.main.id
   cidr_block              = local.public_cidr_subnets[count.index]
   availability_zone       = data.aws_availability_zones.available.names[count.index]
