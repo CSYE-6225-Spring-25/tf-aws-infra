@@ -46,4 +46,33 @@ variable "vpc_subnet_mask_aws" {
   default     = 4
 }
 
+variable "custom_ami" {
+  description = "Custom AMI ID for the EC2 instance"
+  type        = string
+
+}
+
+variable "root_volume_size" {
+  description = "Size of the root volume (in GB)"
+  type        = number
+  default     = 25
+}
+
+variable "root_volume_type" {
+  description = "Type of the root volume"
+  type        = string
+  default     = "gp2"
+}
+
+variable "delete_on_termination" {
+  description = "Whether to delete the EBS volume when the instance is terminated"
+  type        = bool
+  default     = true
+}
+
+variable "app_port" {
+  description = "Port on which your application runs"
+  type        = number
+  default     = 5000
+}
 
