@@ -76,3 +76,8 @@ variable "app_port" {
   default     = 5000
 }
 
+variable "aws_instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+

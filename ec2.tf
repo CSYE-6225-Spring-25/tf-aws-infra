@@ -1,6 +1,6 @@
 resource "aws_instance" "app_instance" {
   ami           = var.custom_ami
-  instance_type = "t2.micro"
+  instance_type = var.aws_instance_type
 
 
   subnet_id = aws_subnet.public[0].id
