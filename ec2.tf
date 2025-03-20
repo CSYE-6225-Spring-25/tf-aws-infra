@@ -20,6 +20,19 @@ resource "aws_instance" "app_instance" {
     delete_on_termination = var.delete_on_termination
   }
 
+  user_data = templatefile("./script/user-data-script.sh", {
+    DB_HOST            = substr(aws_db_instance.aws-rds-instance.endpoint, 0, length(aws_db_instance.aws-rds-instance.endpoint) - 5)
+    DB_USERNAME        = var.db_username
+    DB_PASSWORD        = var.db_password
+    DB_NAME            = var.db_name
+    PORT               = var.app_port
+    AWS_S3_BUCKET_NAME = aws_s3_bucket.aws-healthz-file-bucket.bucket
+    AWS_REGION         = var.vpc_region_aws
+    AWS_ACCESS_KEY     = var.aws_access_key_id
+    AWS_SA_KEY         = var.aws_secret_access_key
+  })
+
+
   tags = {
     Name = "AppInstance"
   }
