@@ -81,3 +81,33 @@ variable "aws_instance_type" {
   default = "t2.micro"
 }
 
+variable "db_name" {
+  description = "database name for csye6225 application"
+  type        = string
+  default     = "postgres"
+}
+
+variable "db_password" {
+  description = "provide a password for database"
+  type        = string
+  default     = "password123"
+}
+
+variable "db_username" {
+  description = "database Username"
+  type        = string
+  default     = "postgres"
+}
+
+variable "aws_access_key_id" {
+  description = "AWS Access Key ID"
+  type        = string
+  sensitive   = true
+}
+
+variable "aws_secret_access_key" {
+  description = "AWS Secret Access Key"
+  type        = string
+  sensitive   = true
+}
+
