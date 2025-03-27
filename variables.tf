@@ -35,7 +35,7 @@ variable "vpc_subnet_count_aws" {
 variable "vpc_profile_aws" {
   description = "Enter aws profile"
   type        = string
-  default     = "dev"
+  default     = "demo"
 }
 
 #  configure subnet mask
@@ -99,15 +99,9 @@ variable "db_username" {
   default     = "postgres"
 }
 
-variable "aws_access_key_id" {
-  description = "AWS Access Key ID"
+variable "env_webapp" {
+  description = "environment will be specified for webapplication"
   type        = string
-  sensitive   = true
-}
-
-variable "aws_secret_access_key" {
-  description = "AWS Secret Access Key"
-  type        = string
-  sensitive   = true
+  default     = "production"
 }
 

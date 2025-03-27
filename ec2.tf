@@ -3,7 +3,8 @@ resource "aws_instance" "app_instance" {
   instance_type = var.aws_instance_type
 
 
-  subnet_id = aws_subnet.public[0].id
+  iam_instance_profile = aws_iam_instance_profile.file_bucket_instance_profile.name
+  subnet_id            = aws_subnet.public[0].id
 
   # Attach the application security group
   vpc_security_group_ids = [
@@ -28,8 +29,7 @@ resource "aws_instance" "app_instance" {
     PORT               = var.app_port
     AWS_S3_BUCKET_NAME = aws_s3_bucket.aws-healthz-file-bucket.bucket
     AWS_REGION         = var.vpc_region_aws
-    AWS_ACCESS_KEY     = var.aws_access_key_id
-    AWS_SA_KEY         = var.aws_secret_access_key
+    ENVIRONMENT        = var.env_webapp
   })
 
 
