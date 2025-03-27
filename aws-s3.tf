@@ -93,3 +93,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "s3-bucket-lifecycle" {
   }
 }
 
+resource "aws_iam_instance_profile" "file_bucket_instance_profile" {
+  name = "fileBucketInstanceProfile"
+  role = aws_iam_role.aws-bucket-file-role.name
+}
+
