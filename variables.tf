@@ -105,3 +105,29 @@ variable "env_webapp" {
   default     = "production"
 }
 
+variable "dns-domain-name" {
+  description = "profile of aws you're using"
+  type        = string
+  default     = "demo"
+}
+variable "dns-sub-domain-name" {
+  description = "domain name for your healthz application"
+  type        = string
+  default     = "rohithvarmadatla.me"
+}
+
+variable "dns-load-balancer-name" {
+  description = "load balancer name"
+  type        = string
+}
+
+variable "load-balancer-zone-id" {
+  description = "The Zone ID of the load balancer"
+  type        = string
+}
+
+variable "key_name" {
+  description = "SSH key pair to access EC2"
+  type        = string
+  default     = ""
+}
