@@ -87,11 +87,11 @@ variable "db_name" {
   default     = "postgres"
 }
 
-variable "db_password" {
-  description = "provide a password for database"
-  type        = string
-  default     = "password123"
-}
+# variable "db_password" {
+#  description = "provide a password for database"
+#  type        = string
+#  default     = "password123"
+# }
 
 variable "db_username" {
   description = "database Username"

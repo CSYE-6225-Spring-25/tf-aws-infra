@@ -1,5 +1,6 @@
 # Auto Scaling Group
 resource "aws_autoscaling_group" "asg" {
+  name                      = "csye6225_asg"
   desired_capacity          = 3
   max_size                  = 5
   min_size                  = 2
@@ -108,11 +109,23 @@ resource "aws_lb_target_group" "app_target_group" {
   }
 }
 
-# ALB Listener
+#resource "aws_lb_listener" "app_listener" {
+# load_balancer_arn = aws_lb.app_load_balancer.arn
+# port              = 80
+# protocol          = "HTTP"
+
+#default_action {
+#type             = "forward"
+#target_group_arn = aws_lb_target_group.app_target_group.arn
+#}
+#}
+
 resource "aws_lb_listener" "app_listener" {
   load_balancer_arn = aws_lb.app_load_balancer.arn
-  port              = 80
-  protocol          = "HTTP"
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = "arn:aws:acm:us-east-1:600627322188:certificate/1527c7a4-ac84-4540-bfb6-17525e355430"
 
   default_action {
     type             = "forward"
