@@ -131,3 +131,8 @@ variable "key_name" {
   type        = string
   default     = ""
 }
+
+variable "ssl_certificate_arn" {
+  description = "The ARN of the ACM SSL certificate to secure the load balancer"
+  type        = string
+}
