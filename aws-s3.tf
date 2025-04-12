@@ -1,5 +1,18 @@
 resource "random_uuid" "aws-s3-bucket-name" {}
 
+resource "aws_kms_key" "s3-bucket-key" {
+  description             = "s3 key using kms"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+  rotation_period_in_days = 90
+  policy                  = aws_kms_key.ec2-kms-key.policy
+}
+
+resource "aws_kms_alias" "s3-alias-name" {
+  name          = "alias/s3-key-terraform"
+  target_key_id = aws_kms_key.s3-bucket-key.key_id
+}
+
 resource "aws_iam_role" "aws-bucket-file-role" {
   name = "fileBucketS3Role"
   assume_role_policy = jsonencode({
@@ -51,7 +64,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "aws-s3-server-sid
   bucket = aws_s3_bucket.aws-healthz-file-bucket.id
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      sse_algorithm     = "aws:kms"
+      kms_master_key_id = aws_kms_key.s3-bucket-key.arn
     }
   }
 }
@@ -85,6 +99,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "s3-bucket-lifecycle" {
   rule {
     id     = "TransitionToStandardIA"
     status = "Enabled"
+    filter {
+      prefix = ""
+    }
 
     transition {
       days          = 30

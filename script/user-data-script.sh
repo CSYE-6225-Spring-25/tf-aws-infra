@@ -2,32 +2,56 @@
 # Enable logging for troubleshooting
 exec > /tmp/update_env.log 2>&1
 set -e
-# Create directory if it doesn't exist
-mkdir -p /opt/csye6225/webapp/
+
+# Updating and installing the required packages
+echo "installing unzip and curl"
+apt-get update -y && apt-get install -y jq unzip curl
+
+# Installing AWS CLI
+echo "Installing AWS CLI......"
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip && sudo ./aws/install
+
 # Database and AWS variables
 DB_HOST=${DB_HOST}
 DB_USERNAME=${DB_USERNAME}
-DB_PASSWORD=${DB_PASSWORD}
 DB_NAME=${DB_NAME}
 PORT=${PORT}
 AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
 AWS_REGION=${AWS_REGION}
 ENVIRONMENT=${ENVIRONMENT}
+SECRET_MANAGER=${SECRET_MANAGER}
+
+# Fetching DB_PASSWORD from Secret Manager
+echo "Fetching DB_PASSWORD from Secret Manager"
+DB_SECRET_PAYLOAD=$(aws secretsmanager get-secret-value \
+  --region "$AWS_REGION" \
+  --secret-id "$SECRET_MANAGER" \
+  --query SecretString \
+  --output text 2>/tmp/aws_error.log) || {
+    echo "[ERROR] Failed to fetch secret"
+    cat /tmp/aws_error.log
+    exit 1
+}
+
+DB_PASSWORD=$(echo "$DB_SECRET_PAYLOAD" | jq -r .password)
 
 # Log variables for debugging
 echo "DB_HOST=${DB_HOST}"
 echo "DB_USERNAME=${DB_USERNAME}"
-echo "DB_PASSWORD=${DB_PASSWORD}"
 echo "DB_NAME=${DB_NAME}"
 echo "PORT=${PORT}"
 echo "AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}"
 echo "AWS_REGION=${AWS_REGION}"
 echo "ENVIRONMENT=${ENVIRONMENT}"
 
+# Create directory if it doesn't exist
+mkdir -p /opt/csye6225/webapp/
+
 # Update .env file in /opt/csye6225/webapp/
 sudo -u rohith bash -c "sed -i '/^DB_HOST=/d' /opt/csye6225/webapp/.env && echo \"DB_HOST=${DB_HOST}\" >> /opt/csye6225/webapp/.env"
 sudo -u rohith bash -c "sed -i '/^DB_USERNAME=/d' /opt/csye6225/webapp/.env && echo \"DB_USERNAME=${DB_USERNAME}\" >> /opt/csye6225/webapp/.env"
-sudo -u rohith bash -c "sed -i '/^DB_PASSWORD=/d' /opt/csye6225/webapp/.env && echo \"DB_PASSWORD=${DB_PASSWORD}\" >> /opt/csye6225/webapp/.env"
+sudo -u rohith bash -c "sed -i '/^DB_PASSWORD=/d' /opt/csye6225/webapp/.env && echo \"DB_PASSWORD=$${DB_PASSWORD}\" >> /opt/csye6225/webapp/.env"
 sudo -u rohith bash -c "sed -i '/^DB_NAME=/d' /opt/csye6225/webapp/.env && echo \"DB_NAME=${DB_NAME}\" >> /opt/csye6225/webapp/.env"
 sudo -u rohith bash -c "sed -i '/^DB_PORT=/d' /opt/csye6225/webapp/.env && echo \"DB_PORT=5432\" >> /opt/csye6225/webapp/.env"
 sudo -u rohith bash -c "sed -i '/^PORT=/d' /opt/csye6225/webapp/.env && echo \"PORT=${PORT}\" >> /opt/csye6225/webapp/.env"
