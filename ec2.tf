@@ -204,7 +204,7 @@ resource "aws_kms_alias" "ec2-kms-key-alias" {
 }
 
 resource "aws_launch_template" "csye6225_asg" {
-  name   = "webapp-launch-template"
+  name          = "webapp-launch-template"
   image_id      = var.custom_ami
   instance_type = var.aws_instance_type
   key_name      = var.key_name
